@@ -51,10 +51,10 @@ def generer_image(annee: int, pourcentage: int, chemin_sortie: str) -> None:
     draw = ImageDraw.Draw(img)
 
     marge_x = 90
-    marge_y = 180
     hauteur_barre = 110
     largeur_barre = LARGEUR_IMG - 2 * marge_x
     rayon = hauteur_barre // 2
+    marge_y = (HAUTEUR_IMG - hauteur_barre) // 2  # barre centrée verticalement
 
     # Bordure blanche en forme de pilule
     draw.rounded_rectangle(
@@ -76,23 +76,6 @@ def generer_image(annee: int, pourcentage: int, chemin_sortie: str) -> None:
             [marge_x + inset2, marge_y + inset2, marge_x + inset2 + largeur_remplie, marge_y + hauteur_barre - inset2],
             radius=max(rayon - inset2, 4), fill=(0, 230, 80),
         )
-
-    try:
-        police_titre = ImageFont.truetype(
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 52
-        )
-    except OSError:
-        police_titre = ImageFont.load_default()
-
-    texte_titre = f"{annee} est complétée à {pourcentage} %."
-    bbox = draw.textbbox((0, 0), texte_titre, font=police_titre)
-    largeur_texte = bbox[2] - bbox[0]
-    draw.text(
-        ((LARGEUR_IMG - largeur_texte) / 2, 65),
-        texte_titre,
-        font=police_titre,
-        fill=(255, 255, 255),
-    )
 
     img.save(chemin_sortie)
 
