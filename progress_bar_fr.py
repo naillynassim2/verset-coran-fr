@@ -130,7 +130,7 @@ def main() -> None:
     chemin_image = "/tmp/barre_progression.png"
     generer_image(annee, pourcentage, chemin_image)
 
-    texte = f"🇫🇷 L'année {annee} est complétée à {pourcentage} %."
+    texte = f"L'année {annee} est complétée à {pourcentage} %."
     poster_sur_x(texte, chemin_image)
     ecrire_etat(annee, pourcentage)
     print(f"Tweet envoyé : {texte}")
