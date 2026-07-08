@@ -70,11 +70,11 @@ def verset_aleatoire():
 
 def recuperer_verset(sourate: int, verset: int) -> str:
     """Appelle l'API fawazahmed0 pour récupérer la traduction française."""
-    url = f"https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/fra-hamidullahmu/{sourate}/{verset}.json"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=10) as r:
-        data = json.loads(r.read())
-        return data["chapter"][verset - 1]["text"] if isinstance(data.get("chapter"), list) else data.get("text", "")
+    url = f"https://api.alquran.cloud/v1/ayah/{sourate}:{verset}/fr.hamidullah"
+req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+with urllib.request.urlopen(req, timeout=10) as r:
+    data = json.loads(r.read())
+    return data["data"]["text"]
 
 def lire_etat() -> dict:
     if ETAT_FICHIER.exists():
