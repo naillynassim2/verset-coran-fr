@@ -1,0 +1,42 @@
+name: Bot Verset du Coran FR
+
+on:
+  schedule:
+    - cron: "0 6 * * *"    # 6h UTC = 8h Belgique  (matin)
+    - cron: "0 11 * * *"   # 11h UTC = 13h Belgique (midi)
+    - cron: "0 18 * * *"   # 18h UTC = 20h Belgique (soir)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  poster:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        run: pip install tweepy Pillow
+
+      - name: Lancer le bot
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: python verset_coran_fr.py
+
+      - name: Sauvegarder l'état
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add etat_coran.json
+          git diff --cached --quiet || git commit -m "Mise à jour état bot Coran"
+          git push
